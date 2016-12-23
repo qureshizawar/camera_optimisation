@@ -1,5 +1,5 @@
 
-ChipWidth = [20000];
+ChipWidth = [200];
 ChipHeight = [300];
 FocalLength = [1.0];
 PixelWidth = [0.0001];

@@ -5,9 +5,13 @@ function [] = TestRange ( Parameter , MinVal , MaxVal , Name )
 % as an identifier and Matlab exits .
 
 
-if Parameter < MinVal || Parameter > MaxVal
-error (' Input parameter %s, value %d, was out of range ', ...
-Name , Parameter )
+if Parameter < MinVal
+    error (' Input parameter %s, value %d, was too low ', ...
+    Name , Parameter )
+
+elseif Parameter > MaxVal
+    error (' Input parameter %s, value %d, was too high ', ...
+    Name , Parameter )
 end
 
 
