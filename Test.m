@@ -12,4 +12,9 @@ Parameters = [ ChipWidth , ChipHeight , ...
     FocalLength , PixelWidth , PixelHeight ,...
     Skewness ,P_u , P_v];
 
-SingleVectorCameraModel ( Parameters )
+%SingleVectorCameraModel ( Parameters )
+R = RandomRotationMatrix ()
+R'*R;
+det(R)
+[U,W,V] = eig(R)
+W = diag(W)
