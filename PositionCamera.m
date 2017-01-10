@@ -1,9 +1,15 @@
-function [ T_cw ] = PositionCamera ( T_ow )
+function [ T_cw ] = PositionCamera (T_ow , Distance )
 % PositionCamera
-% Generates a 'random ' camera frame that has a good chance of the
-% object being visible in the camera when the object is a 1m cube .
+% Generates a 'random ' camera frame that almost points
+% at the origin of the calibration object back along the object 's
+% z- axis ( which is perturbed ). Aim is to 'fill ' the camera image
+% with calibration grid .
 %
-% Input T_ow is the 4x4 object frame in world coordinates
+% T_ow is the 4x4 frame of the calibration grid in world coordinates .
+% Distance is the base distance to the grid from the camera
+% along the normal and a random factor of 0.1 times the distance is
+% added .
+%
 % T_cw is the 4x4 camera frame in world coordinates .
 
 % Assign space for the camera frame
@@ -15,9 +21,10 @@ T_cw (4 ,4) = 1;
 % extract the object origin
 ObjectOrigin = T_ow (1:3 ,4) ;
 
-% View the camera from about 10 metres or so ( unrelated to the object
-% frame ).
-InitialViewVector = 10000* rand (3 ,1);
+% View the camera from about 'Distance ' with a bit of randomness
+% along the negative z- axis of the grid . This vector will
+% be almost parallel to the camera z axis .
+InitialViewVector = -Distance * T_ow (1:3 ,3) + 0.1* Distance * rand (3 ,1);
 
 % Define the origin of the camera frame in world coordinates
 T_cw (1:3 ,4) = ObjectOrigin - InitialViewVector ;
@@ -25,13 +32,13 @@ T_cw (1:3 ,4) = ObjectOrigin - InitialViewVector ;
 % Define the camera z- axis as pointing at the object origin
 Normz = norm ( InitialViewVector );
 if Normz < eps
-error (' Unable to normalize the camera z-axis ');
+    error (' Unable to normalize the camera z-axis ');
 end
-% Define a unit vector
+% Define a unit vector pointing at the object .
 InitialCameraz = InitialViewVector / Normz ;
 
-% Perturb the initial z axis a bit
-CameraZ = InitialCameraz - 0.01* rand (3 ,1);
+% Perturb the initial z axis a bit more for luck
+CameraZ = InitialCameraz - 0.01*( rand (3 ,1) -0.5);
 
 % ... and normalize again (no need to check norm )
 CameraZ = CameraZ / norm ( CameraZ );
@@ -43,7 +50,7 @@ CameraX = CameraX - ( CameraZ'* CameraX )* CameraZ ;
 % normalize the x- axis
 Normx = norm ( CameraX );
 if Normx < eps
-error (' Unable to normalize the camera x-axis ')
+    error (' Unable to normalize the camera x-axis ')
 end
 CameraX = CameraX / Normx ;
 

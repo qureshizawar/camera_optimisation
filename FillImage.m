@@ -16,7 +16,7 @@ GridCorners = [- GridWidth /2 -GridWidth /2 GridWidth /2 GridWidth /2; ...
     1 1 1 1];
 
 % Compute the positions of the GridCorners in the world
-GridCorners = T_ow * GridCorners ;
+GridCorners = T_ow * GridCorners 
 
 % We have a 1m by 1m grid somewhere in space and we need to view
 % the grid from the camera . We view from a random location based
@@ -38,11 +38,11 @@ while InsideImage == 1
     T_cw = PositionCamera (T_ow , CameraBaseDistance );
 
     % Compute where corners are in the unit camera frame
-    UnitCorners = ( T_cw \ GridCorners );
+    UnitCorners = ( T_cw \ GridCorners )
     % Project into the unit camera
-    UnitCorners = UnitCorners (1:3 ,:) ;
+    UnitCorners = UnitCorners (1:3 ,:) 
     % And convert to camera pixels and label them as homogeneous .
-    HomogeneousCorners = KMatrix * UnitCorners ;
+    HomogeneousCorners = KMatrix * UnitCorners 
 
     % Dehomogenise the image of the corners of the grid
     Corners = zeros (2 ,4);

@@ -1,20 +1,38 @@
+% Example script for estimation task 1
+%
+% This script performs the following actions :
+% 1. Constructs a camera model loosely based on an iPhone6
+% 2. Constructs a calibration grid 1m on a side with 10 mm grid spacing .
+% 3. Positions the grid somewhere in space .
+% 4. Places the camera in a' random ' location so that the grid
+% fills the camera image . Check this location to see if the
+% grid outline is outside the image ; if not , more the camera nearer
+% to the grid . This is NOT a smart way of positioning things , but
+% it models the likely behaviour of a human user .
+% 5. Compute the image of the grid and constructs a set of grid - image
+% correspondences and add 'noise ' ot the image .
+% 6. Convert some of the correspondences to outliers .
+% 7. Carry out a RANSAC estimation of the homography .
 
-ChipWidth = [200];
-ChipHeight = [300];
-FocalLength = [1.0];
-PixelWidth = [0.0001];
-PixelHeight = [0.0001];
-Skewness = [-0.1];
-P_u = [0.25];
-P_v = [0.25];
+% 1. Construct the Camera model
+[ KMatrix , CameraHeight , CameraWidth ] = BuildCamera ;
 
-Parameters = [ ChipWidth , ChipHeight , ...
-    FocalLength , PixelWidth , PixelHeight ,...
-    Skewness ,P_u , P_v];
+% 2. Construct a 1m by 1m grid with 10 mm tiles in the grid frame
+% The grid is a set of 4- element vectors [x y 0 1] '.
+GridWidth = 1000;
+GridIncrement = 10;
+CalibrationGrid = BuildGrid ( GridIncrement , GridWidth );
 
-%SingleVectorCameraModel ( Parameters )
-R = RandomRotationMatrix ()
-R'*R;
-det(R)
-[U,W,V] = eig(R)
-W = diag(W)
+% 3. Choose somewhere in space for the grid
+% T_ow is the 4x4 tranformation matrix from grid to world .
+T_ow = PositionGrid ();
+% 4 Choose a 'random ' location for the camera that fills the image .
+% T_cw is the 4x4 transformation matrix from camera to world
+T_cw = FillImage (T_ow , KMatrix , GridWidth , CameraHeight , CameraWidth );
+
+% 5 We now fill the camera with a noisy image of the grid and generate
+% the point correpondences .
+% Correspond is a set of pairs of vectors of the form [[u v]' [x y]']
+% for each grid corner that lies inside the image .
+Correspond = BuildNoisyCorrespondences (T_ow ,T_cw , CalibrationGrid , ...
+KMatrix , CameraHeight , CameraWidth );

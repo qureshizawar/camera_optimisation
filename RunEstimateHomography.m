@@ -43,7 +43,7 @@ KMatrix , CameraHeight , CameraWidth );
 pOutlier = 0.05;
 for j = 1: length ( Correspond )
     if rand < pOutlier
-    % This is an outlier - so put the point anwhere in the image .
+    % This is an outlier - so put the point anywhere in the image .
     Correspond (1,j) = rand * ( CameraWidth -1);
     Correspond (2,j) = rand * ( CameraHeight -1);
     end
