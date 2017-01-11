@@ -76,8 +76,8 @@ for Runs = 1: NRuns
             % row indices into the matrix and vector for this data point
             r1 = j*2 -1;
             r2 = j *2;
-            [ Regressor (r1:r2,:) , DataVec (r1:r2)] = ...
-                HomogRowPair ( Correspond (:, SamplePoints (j)));
+            [ Regressor(r1:r2,:) , DataVec(r1:r2)] = ...
+                HomogRowPair(Correspond(:,SamplePoints(j)));
 
         end
 
@@ -102,12 +102,12 @@ for Runs = 1: NRuns
             CurrentConsensus = zeros (1,n);
             % 4. Go through all the points and see how large the error is
             for j = 1:n
-                HomogenousPoint = Homog * [ Correspond (3,j); Correspond (4,j) ;1];
+                HomogenousPoint = Homog * [ Correspond(3,j); Correspond(4,j) ;1];
                 HomogenousPoint (1) = HomogenousPoint (1) / HomogenousPoint (3) ;
                 HomogenousPoint (2) = HomogenousPoint (2) / HomogenousPoin (3) ;
 
                 ThisError = norm ( HomogenousPoint (1:2) ...
-                    - [ Correspond (1,j); Correspond (2,j)]);
+                    - [ Correspond(1,j); Correspond(2,j)]);
 
                 if ThisError < MaxError
                     nCurrent = nCurrent +1;
@@ -126,7 +126,7 @@ for Runs = 1: NRuns
     end
 end
 
-% 6. BestConsensus now contains the largest set of consistent estimates .
+% 6. BestConsensus now contains the largest set of consistent estimates.
 % Use this set to estimate the homography using a robust inverse
 if nBest > 0
     % The number of measurements in the consensus set
@@ -140,7 +140,7 @@ if nBest > 0
         % HomogRowPair generates 2 rows of the 8 column matrix
         % that multiplies the unknown vector of homography elements
         % to get the vector of measurements .
-        [ Regressor (r1:r2, :) ,DataVec (r1:r2)] = ...
+        [ Regressor(r1:r2, :) ,DataVec(r1:r2)] = ...
             HomogRowPair ( Correspond (:, BestConsensus (j)));
     end
     % Find the singular value decomposition in order to compute the
@@ -150,12 +150,12 @@ if nBest > 0
     % The condition number of the computation - a measure of how reliable
     % the inversion is.
     if D(8 ,8) < eps
-        Condition = 1.0 E16; % Just a very big number .
+        Condition = 1.0^E16; % Just a very big number .
     else
         Condition = D(1 ,1) / D(8 ,8);
     end
 
-    if Condition > 1.0 e8
+    if Condition > 1.0^e8
         % A very poor condition number - signal that there is no homograpy
         Homog = zeros (3) ;
     else

@@ -58,9 +58,10 @@ end
 k=k-1;
 
 %Add noisy vectors to the [u,v] grid points using the function 'randn'
-%Noise = NoiseSD*randn(2, s);
+NoiseSD = sqrt(0.5);
+Noise = NoiseSD*randn(2, s);
 
-%InsidePoints_uv = InsidePoints_uv + Noise;
+InsidePoints_uv = InsidePoints_uv + Noise;
 
 %Extract the [x,y] coordinates, corresponding to the [u,v] coordinates
 %identified earlier, from GridPoints
@@ -83,5 +84,5 @@ Correspond(1:2,:) = InsidePoints_uv;
 Correspond(3:4,:) = InsidePoints_xy;
 
 %Cut Correspond down to size 'k' for computational speed
-Correspond = Correspond(:, 1:k);
+Correspond = Correspond(:, 1:k)
 end
