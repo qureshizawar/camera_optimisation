@@ -1,6 +1,13 @@
 function [Correspond] = BuildNoisyCorrespondences (T_ow ,T_cw , CalibrationGrid , ...
 KMatrix , CameraHeight , CameraWidth )
 
+%Ensure GridPoints has the correct dimensions
+if size(CalibrationGrid, 1) ~= 4;
+    error('CalibrationGrid has incorrect dimensions')
+end
+
+%END OF INPUT CHECKS
+
 % Compute the positions of the GridCorners in the world
 WorldGrid = T_ow * CalibrationGrid;
 
@@ -23,19 +30,22 @@ s = size(CameraGrid_2D_Hom, 2);
 %Assign space for the 2-D coordinate matrix in [u,v] steps
 CameraGrid_uv = zeros(2, s);
 
-%Find out which of the grid points lie within the camera's view, making
-%a note of where they lie in GridPoints_uv, and place these points within
-%another matrix. 
+% We now have a set of homogeneous Points representing 2D points .
+% We need to normalise these Points to get 2D points .
 for i=1:s
     CameraGrid_uv(:,i) = CameraGrid_2D_Hom(1:2, i)/CameraGrid_2D_Hom(3, i);
 end
 
+%Find out which of the grid points lie within the camera's view, making
+%a note of where they lie in CameraGrid_uv, and place these points within
+%another matrix.
+
 %Assign space for the matrix of points inside the camera. Assign space
-%sufficient to store all points in GridPoints_uv
+%sufficient to store all points in CameraGrid_uv
 InsidePoints_uv = zeros(2, s);
 
 %Assign space for an array containing the index of all points within
-%the camera's view (their column within GridPoints_uv)
+%the camera's view (their column within CameraGrid_uv)
 InsideIndex = zeros(1, s);
 
 %Define an index to place coordinates in InsidePoints_uv
@@ -58,10 +68,10 @@ end
 k=k-1;
 
 %Add noisy vectors to the [u,v] grid points using the function 'randn'
-NoiseSD = sqrt(0.5);
-Noise = NoiseSD*randn(2, s);
+%NoiseSD = sqrt(0.5);
+%Noise = NoiseSD*randn(2, s);
 
-InsidePoints_uv = InsidePoints_uv + Noise;
+%InsidePoints_uv = InsidePoints_uv + Noise;
 
 %Extract the [x,y] coordinates, corresponding to the [u,v] coordinates
 %identified earlier, from GridPoints

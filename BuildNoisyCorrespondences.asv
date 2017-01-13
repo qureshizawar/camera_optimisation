@@ -2,11 +2,11 @@ function [Correspond] = BuildNoisyCorrespondences (T_ow ,T_cw , CalibrationGrid 
 KMatrix , CameraHeight , CameraWidth )
 
 % Compute the positions of the GridCorners in the world
-CalibrationGrid = T_ow * CalibrationGrid;
+WorldGrid = T_ow * CalibrationGrid;
 
 %Transform the grid points to camera coordinates (in the camera's unit plane) 
 %Note T_wc = (T_cw)^(-1)
-CameraGrid = ( T_cw \ CalibrationGrid );
+CameraGrid = ( T_cw \ WorldGrid );
 
 %Extract the 3-D points from GridPoints by removing the homogeneous scaler
 %from the matrix
@@ -58,6 +58,7 @@ end
 k=k-1;
 
 %Add noisy vectors to the [u,v] grid points using the function 'randn'
+%NoiseSD = sqrt(0.5);
 %Noise = NoiseSD*randn(2, s);
 
 %InsidePoints_uv = InsidePoints_uv + Noise;
@@ -71,7 +72,7 @@ InsidePoints_xy = zeros(2,s);
 for i = 1:k
     %Extract the index from InsideIndex
     j = InsideIndex(i);
-    InsidePoints_xy(:, i) = GridPoints(1:2, j); 
+    InsidePoints_xy(:, i) = CalibrationGrid(1:2, j); 
 end
 
 %Build the matrix of corresponding [x,y] and [u,v] points
@@ -83,5 +84,5 @@ Correspond(1:2,:) = InsidePoints_uv;
 Correspond(3:4,:) = InsidePoints_xy;
 
 %Cut Correspond down to size 'k' for computational speed
-Correspond = Correspond(:, 1:k);
+Correspond = Correspond(:, 1:k)
 end

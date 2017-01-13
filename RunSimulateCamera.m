@@ -24,8 +24,8 @@ KMatrix = SingleVectorCameraModel ( Parameters );
 % Construct an object in its own frame
 %Cube = BuildCube ;
 ObjectLines = [
- 0 1 1 0 0 0 1 1
- 0 0 1 1 1 0 0 1
+ 0 0 1 1 0 0 1 1
+ 0 1 1 0 0 1 1 0
  0 0 0 0 1 1 1 1
  0 0 0 0 0 0 0 1];
 
@@ -33,7 +33,7 @@ ObjectLines = [
 T_ow = PositionObject ;
 
 % Position the camera so that it is likely that the object can be seen
-T_cw = PositionCamera ( T_ow );
+T_cw = PositionCamera_old ( T_ow );
 
 % Look at what we have
 ViewCamera (ObjectLines ,T_ow , KMatrix , CameraHeight , CameraWidth , T_cw )

@@ -40,14 +40,14 @@ KMatrix , CameraHeight , CameraWidth );
 % 6. Add in some 'outliers ' by replacing [u v]' with a point
 % somewhere in the image .
 % Define the Outlier probability
-pOutlier = 0.05;
-for j = 1: length ( Correspond )
-    if rand < pOutlier
+%pOutlier = 0.05;
+%for j = 1: length ( Correspond )
+    %if rand < pOutlier
     % This is an outlier - so put the point anywhere in the image .
-    Correspond (1,j) = rand * ( CameraWidth -1);
-    Correspond (2,j) = rand * ( CameraHeight -1);
-    end
-end
+    %Correspond (1,j) = rand * ( CameraWidth -1);
+    %Correspond (2,j) = rand * ( CameraHeight -1);
+    %end
+%end
 
 figure (1)
 plot ( Correspond (1 ,:) ,Correspond (2 ,:) ,'.')

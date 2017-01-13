@@ -77,7 +77,7 @@ for Runs = 1: NRuns
             r1 = j*2 -1;
             r2 = j *2;
             [ Regressor(r1:r2,:) , DataVec(r1:r2)] = ...
-                HomogRowPair(Correspond(:,SamplePoints(j)));
+                HomogRowPair(Correspond(:,SamplePoints(j)))
 
         end
 
