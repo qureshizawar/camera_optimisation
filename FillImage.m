@@ -16,7 +16,7 @@ GridCorners = [- GridWidth /2 -GridWidth /2 GridWidth /2 GridWidth /2; ...
     1 1 1 1];
 
 % Compute the positions of the GridCorners in the world
-GridCorners = T_ow * GridCorners 
+GridCorners = T_ow * GridCorners;
 
 % We have a 1m by 1m grid somewhere in space and we need to view
 % the grid from the camera . We view from a random location based
