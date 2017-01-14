@@ -1,0 +1,17 @@
+function [Grid] = BuildGrid(GridIncrement,GridWidth)
+
+Grid = zeros(4,100);
+n = GridWidth/GridIncrement;
+x = linspace(-GridWidth/2,GridWidth/2,n);
+
+for i = 1:100
+    Grid(1,i) = x(1,i)
+end
+
+for j = 1:100
+    Grid(2,j) = 
+%y = linspace(-GridWidth/2,GridWidth/2,n);
+Grid(3,:)= 0
+Grid(4,:)= 1
+
+%Grid = [x; y; A; B;]

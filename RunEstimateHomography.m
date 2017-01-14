@@ -68,4 +68,4 @@ T_oc = T_cw \ T_ow ;
 % Construct the non - normalized homography from K*[x y t]
 OrigHomog = KMatrix * [ T_oc(1:3 ,2) T_oc(1:3 ,2) T_oc(1:3 ,4) ];
 % And normalise so that (3 ,3) is 1.0 - output for inspection
-OrigHomog = OrigHomog / OrigHomog (3 ,3);
+OrigHomog = OrigHomog / OrigHomog (3 ,3)
