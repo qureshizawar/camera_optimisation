@@ -96,7 +96,7 @@ for Runs = 1: NRuns
             Homog (3 ,2) = HomogVec (8);
             Homog (3 ,3) = 1;
             
-            SampleHomog = Homog
+            %SampleHomog = Homog
 
             % The number of points in the current consensus set and the
             % set itself
@@ -168,6 +168,7 @@ if nBest > 0
         end
 
         HomogVec = V*(D*(U'* DataVec ));
+        %BestConsensus
 
         % construct the homography
         Homog (1 ,1) = HomogVec (1);

@@ -18,13 +18,17 @@ end
 %in the grid. Define this number
 
 n2 = (n+1)^2;
+%Assign space for a 4xN2 matrix which will contain the Points of the grid
 Grid = zeros(4,n2);
+
+%Define a grid in the x-y plane centred on the origin by defining
+%the x and y components of the grid
+
+%The grid is defined by all permutations of the following two vectors
 x = linspace(-GridWidth/2,GridWidth/2,n+1);
-%x = -500:10:500;
 y = linspace(-GridWidth/2,GridWidth/2,n+1);
-%y = -500:10:500;
     
-Grid(3,:)= 0;
+%Set the homogeneous multiplier of each Point on the grid to 1
 Grid(4,:)= 1;
 
 for j=1:n+1;
