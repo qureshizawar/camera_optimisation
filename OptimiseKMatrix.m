@@ -149,6 +149,10 @@ Gradient = zeros(ProblemSize ,1);
 
 % 2. Compute the inital error vector and the Jacobians and the inner
 % product
+
+%FrameParameters{1, NANGLE }
+%Data{1, NCORRESPOND }
+
 for j = 1: nImages
     % The error vector for each image
     OptComponents{j, NERRORVECTOR } = ComputeImageErrors ( KMatrix , ...
