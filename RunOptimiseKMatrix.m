@@ -78,7 +78,7 @@ for CalImage = 1: nImages
         % 6. Add in some 'outliers ' by replacing [u v]' with a point
         % somewhere in the image .
         % Define the Outlier probability
-        pOutlier = 0;
+        pOutlier = 0.05;
         for j = 1: length ( Correspond )
             r = rand ;
             if r < pOutlier
@@ -178,12 +178,18 @@ KMatEstimated = chol (Phi);
 % first normalize the KMatrix
 KMatEstimated = KMatEstimated / KMatEstimated (3 ,3);
 
+Seed = KMatEstimated;
+% Add 1.0 to the translation part of the image
+Seed (1 ,3) = Seed (1 ,3) + 1;
+Seed (2 ,3) = Seed (2 ,3) + 1;
+Seed (1:2 ,1:3) = Seed (1:2 ,1:3) / CameraScale
+
 % Optimize the K- matrix
 OptKMatrix = OptimiseKMatrix ( KMatEstimated , HomogData );
 
 % Add 1.0 to the translation part of the image
-KMatEstimated (1 ,3) = KMatEstimated (1 ,3) + 1;
-KMatEstimated (2 ,3) = KMatEstimated (2 ,3) + 1;
+OptKMatrix (1 ,3) = OptKMatrix (1 ,3) + 1;
+OptKMatrix (2 ,3) = OptKMatrix (2 ,3) + 1;
 
 % Rescale back to pixels
-KMatEstimated (1:2 ,1:3) = KMatEstimated (1:2 ,1:3) / CameraScale 
+OptKMatrix (1:2 ,1:3) = OptKMatrix (1:2 ,1:3) / CameraScale 

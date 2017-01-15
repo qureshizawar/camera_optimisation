@@ -31,4 +31,9 @@ for z = 1:s
     e((2*z),1) = Error(2,z);
 end
 
+%u
+%e(1:s) = Error(1,:);
+%v
+%e(s+1:2*s) = Error(2,:);
+
 E = e;
