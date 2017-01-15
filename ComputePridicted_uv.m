@@ -1,9 +1,14 @@
 function [Pridicted_uv] = ComputePridicted_uv ( KMatrix ,NANGLE, NTRANSLATION,...
     NCORRESPOND, NCONSENSUS)
 
+RotationAngle = norm(NANGLE);
+RotationAxis = NANGLE/RotationAngle;
+
+R = RodriguesRotation ( RotationAxis , RotationAngle );
+
 T = zeros(3);
-T(:,1) = 1;
-T(:,2) = NANGLE;
+T(:,1) = R(:,1);
+T(:,2) = R(:,2);
 T(:,3) = NTRANSLATION;
 
 s = sum( all( NCONSENSUS ~= 0, 1 ) );

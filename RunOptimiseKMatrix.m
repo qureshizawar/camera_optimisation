@@ -24,6 +24,8 @@ nImages = 6;
 % 1. Construct the Camera model
 [ KMatrix , CameraHeight , CameraWidth ] = BuildCamera ;
 
+OKMatrix = KMatrix
+
 % 2. Construct a 1m by 1m grid with 10 mm tiles in the grid frame
 % The grid is a set of 4- element vectors [x y 0 1] '.
 GridWidth = 1000;
@@ -76,7 +78,7 @@ for CalImage = 1: nImages
         % 6. Add in some 'outliers ' by replacing [u v]' with a point
         % somewhere in the image .
         % Define the Outlier probability
-        pOutlier = 0.05;
+        pOutlier = 0;
         for j = 1: length ( Correspond )
             r = rand ;
             if r < pOutlier
@@ -184,4 +186,4 @@ KMatEstimated (1 ,3) = KMatEstimated (1 ,3) + 1;
 KMatEstimated (2 ,3) = KMatEstimated (2 ,3) + 1;
 
 % Rescale back to pixels
-KMatEstimated (1:2 ,1:3) = KMatEstimated (1:2 ,1:3) / CameraScale ;
+KMatEstimated (1:2 ,1:3) = KMatEstimated (1:2 ,1:3) / CameraScale 

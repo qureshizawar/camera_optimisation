@@ -184,12 +184,14 @@ for j = 1: nImages
 	OptComponents{j, NKMATJACOB }'*OptComponents{j, NFRAMEJACOB };
 	
 	JTransposeJ ( StartRow :EndRow ,1:5) = JTransposeJ (1:5 , StartRow : EndRow )';
-
+    
+    %OptComponents{j, NKMATJACOB}'
+    %OptComponents{j, NERRORVECTOR}
 	% Compute the gradient vector
 	Gradient (1:5) = Gradient (1:5) + ...
-	OptComponents{j, NKMATJACOB }'*OptComponents{j, NERRORVECTOR };
-	Gradient ( StartRow : EndRow ) = OptComponents {j, NFRAMEJACOB }'*...
-	OptComponents{j, NERRORVECTOR };
+	OptComponents{j, NKMATJACOB}'*OptComponents{j, NERRORVECTOR};
+	Gradient (StartRow : EndRow) = OptComponents{j, NFRAMEJACOB}'*...
+	OptComponents{j, NERRORVECTOR};
 
 end
 

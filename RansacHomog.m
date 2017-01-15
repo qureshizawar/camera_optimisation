@@ -96,7 +96,7 @@ for Runs = 1: NRuns
             Homog (3 ,2) = HomogVec (8);
             Homog (3 ,3) = 1;
             
-            %SampleHomog = Homog
+            SampleHomog = Homog
 
             % The number of points in the current consensus set and the
             % set itself
@@ -132,18 +132,18 @@ end
 % Use this set to estimate the homography using a robust inverse
 if nBest > 0
     % The number of measurements in the consensus set
-    Regressor = zeros (2* nBest ,8);
-    DataVec = zeros (2* nBest ,1);
+    Regressor = zeros (2*nBest,8);
+    DataVec = zeros (2*nBest,1);
 
     % Construct the regressor
     for j = 1: nBest
-        r1 = j*2 -1;
-        r2 = j *2;
+        r1 = j*2-1;
+        r2 = j*2;
         % HomogRowPair generates 2 rows of the 8 column matrix
         % that multiplies the unknown vector of homography elements
         % to get the vector of measurements .
         [ Regressor(r1:r2, :) ,DataVec(r1:r2)] = ...
-            HomogRowPair ( Correspond (:, BestConsensus (j)));
+            HomogRowPair (Correspond(:,BestConsensus(j)));
     end
     % Find the singular value decomposition in order to compute the
     % robust pseudo - inverse .
