@@ -67,7 +67,7 @@ k = 1;
 for i=1:s
     if CameraGrid_uv(1, i) > 0 && CameraGrid_uv(1, i) < (CameraWidth -1) ... 
        && CameraGrid_uv(2, i) > 0 && CameraGrid_uv(2, i) < (CameraHeight -1)
-       %If the [u,v] point is within the sensor chip's limits, place the 
+       %If the [u,v] point is within the camera's view, place the 
        %point in InsidePoints_uv and store its column index within InsideIndex
        InsidePoints_uv(:, k) = CameraGrid_uv(:, i);
        InsideIndex(k) = i;
@@ -81,7 +81,7 @@ end
 k=k-1;
 
 %Add noisy vectors to the [u,v] grid points using the function 'randn'
-NoiseSD = sqrt(0.5);
+NoiseSD = sqrt(0.005);
 Noise = NoiseSD*randn(2, s);
 
 InsidePoints_uv = InsidePoints_uv + Noise;

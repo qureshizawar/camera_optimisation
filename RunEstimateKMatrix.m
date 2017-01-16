@@ -41,12 +41,12 @@ CameraScale = 2.0 / CameraHeight ;
 else
 CameraScale = 2.0 / CameraWidth ;
 end
-GridScale = 2.0/ GridWidth ;
+GridScale = 2.0/GridWidth ;
 
 % Generate the calibration images and the homographies
 % Store Homographies and concensus sets in a Matlab Cell Array
 % called HomogData .
-HomogData = cell ( nImages ,3);
+HomogData = cell (nImages ,3);
 
 for CalImage = 1: nImages
 
@@ -82,8 +82,8 @@ for CalImage = 1: nImages
 
         % Now scale the grid and camera to [-1, 1] to improve
         % the conditioning of the Homography estimation .
-        Correspond (1:2 ,:) = Correspond (1:2 ,:) * CameraScale - 1.0;
-        Correspond (3:4 ,:) = Correspond (3:4 ,:) * GridScale ;
+        Correspond (1:2 ,:) = Correspond (1:2 ,:)*CameraScale - 1.0;
+        Correspond (3:4 ,:) = Correspond (3:4 ,:)*GridScale ;
 
         % 7. Perform the Ransac estimation - output the result for inspection
         % If the Ransac fails it retuns a zero Homography
@@ -95,14 +95,14 @@ for CalImage = 1: nImages
         % Note : The above is in pixels - so scale before Ransac !
         RansacRuns = 50; % The number of runs when creating the consensus set .
         [Homog , BestConsensus ] = ...
-            RansacHomog ( Correspond , Maxerror * CameraScale , RansacRuns );
+            RansacHomog (Correspond , Maxerror*CameraScale , RansacRuns);
 
         if Homog (3 ,3) > 0
             % This image worked . So record the homography and the
             % consensus set
-            HomogData { CalImage ,1} = Homog ;
-            HomogData { CalImage ,2} = Correspond ;
-            HomogData { CalImage ,3} = BestConsensus ;
+            HomogData {CalImage ,1} = Homog ;
+            HomogData {CalImage ,2} = Correspond ;
+            HomogData {CalImage ,3} = BestConsensus ;
         else
             % The estimate failed . So go around again .
             Estimating = 1;
@@ -112,11 +112,11 @@ for CalImage = 1: nImages
 end % end of the nImages loop
 
 % 8. Build the regressor for estimating the Cholesky product
-Regressor = zeros (2* nImages ,6);
+Regressor = zeros (2*nImages ,6);
 for CalImage = 1: nImages
-	r1 = 2* CalImage -1;
-	r2 = 2* CalImage ;
-	Regressor (r1:r2 ,:) = KMatrixRowPair ( HomogData { CalImage ,1}) ;
+	r1 = 2*CalImage -1;
+	r2 = 2*CalImage ;
+	Regressor (r1:r2 ,:) = KMatrixRowPair(HomogData{CalImage ,1}) ;
 end
 
 % Find the kernel
@@ -128,7 +128,7 @@ K = V(:,I);
 
 % The matrix to be constructed needs to be positive definite
 % It is necessary that K (1) be positive .
-if K (1) < 0
+if K(1) < 0
     K = -K;
 end
 

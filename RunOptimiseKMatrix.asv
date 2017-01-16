@@ -3,14 +3,14 @@
 %
 % 1. Construct a camera model loosely based on an iPhone6
 % 2. Construct a calibration grid 1m on a side with 10 mm grid spacing .
-% 3. Position the grid somewhere in space .
+% 3. Position the grid somewhere in space.
 %
 % Perform the following actions on each image , repeating an image
-% if the homography estimation failed .
+% if the homography estimation failed.
 % 4. Place the camera somewhere in space to generate a full image
-% of tile square corner locations .
-% 5. Generate the noisy image of the grid .
-% 6. Add in some outliers .
+% of tile square corner locations.
+% 5. Generate the noisy image of the grid.
+% 6. Add in some outliers.
 % 7. Perform a Ransac estimate of the homography
 %
 % Once the homographies have been estimated
@@ -23,6 +23,8 @@ nImages = 6;
 
 % 1. Construct the Camera model
 [ KMatrix , CameraHeight , CameraWidth ] = BuildCamera ;
+
+OKMatrix = KMatrix
 
 % 2. Construct a 1m by 1m grid with 10 mm tiles in the grid frame
 % The grid is a set of 4- element vectors [x y 0 1] '.
@@ -116,19 +118,19 @@ for CalImage = 1: nImages
             Estimating = 1;
         end
 
-	end % end of the while Estimating == 1 loop
+    end % end of the while Estimating == 1 loop
 end % end of the nImages loop
 
 % 8. Build the regressor for estimating the Cholesky product
-Regressor = zeros (2* nImages ,6);
+Regressor = zeros (2*nImages ,6);
 for CalImage = 1: nImages
-	r1 = 2* CalImage -1;
+	r1 = 2* CalImage-1;
 	r2 = 2* CalImage ;
 	Regressor (r1:r2 ,:) = KMatrixRowPair ( HomogData { CalImage ,1}) ;
 end
 
 % Find the kernel
-[U,D,V] = svd ( Regressor ,'econ ');
+[U,D,V] = svd (Regressor ,'econ');
 D = diag (D);
 [M,I] = min (D);
 % K is the estimate of the kernel
@@ -167,7 +169,7 @@ end
 KMatEstimated = chol (Phi);
 
 % Invert the factor
- KMatEstimated = KMatEstimated \ eye (3);
+KMatEstimated = KMatEstimated \ eye (3);
 
 % The scaling of the grid has no impact on the scaling of
 % the K- matrix as the vector 't' takes no part in the estimate
@@ -176,12 +178,18 @@ KMatEstimated = chol (Phi);
 % first normalize the KMatrix
 KMatEstimated = KMatEstimated / KMatEstimated (3 ,3);
 
+Seed = KMatEstimated;
+% Add 1.0 to the translation part of the image
+Seed (1 ,3) = Seed (1 ,3) + 1;
+Seed (2 ,3) = Seed (2 ,3) + 1;
+Seed (1:2 ,1:3) = Seed (1:2 ,1:3) / CameraScale
+
 % Optimize the K- matrix
 OptKMatrix = OptimiseKMatrix ( KMatEstimated , HomogData );
 
 % Add 1.0 to the translation part of the image
-KMatEstimated (1 ,3) = KMatEstimated (1 ,3) + 1;
-KMatEstimated (2 ,3) = KMatEstimated (2 ,3) + 1;
+OptKMatrix (1 ,3) = OptKMatrix (1 ,3) + 1;
+OptKMatrix (2 ,3) = OptKMatrix (2 ,3) + 1;
 
 % Rescale back to pixels
-KMatEstimated (1:2 ,1:3) = KMatEstimated (1:2 ,1:3) / CameraScale ;
+OptKMatrix (1:2 ,1:3) = OptKMatrix (1:2 ,1:3) / CameraScale 

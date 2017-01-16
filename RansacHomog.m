@@ -52,7 +52,7 @@ for Runs = 1: NRuns
             while searching == 1
                 searching = 0;
                 % Initial sample point
-                SamplePoints (j) = 1 + fix(n* rand );
+                SamplePoints (j) = 1 + fix(n*rand);
                 if SamplePoints (j) > n
                     SamplePoints (j) = n;
                 end
@@ -81,8 +81,9 @@ for Runs = 1: NRuns
 
         end
 
+
         % 3. Is the regressor full rank ?
-        if rank ( Regressor ) > 7
+        if rank(Regressor) > 7
             HomogVec = Regressor \ DataVec ;
 
             % The homography for this sample
@@ -107,11 +108,11 @@ for Runs = 1: NRuns
                 HomogenousPoint (2) = HomogenousPoint (2) / HomogenousPoint (3) ;
 
                 ThisError = norm ( HomogenousPoint (1:2) ...
-                    - [ Correspond(1,j); Correspond(2,j)]);
+                    - [Correspond(1,j);Correspond(2,j)]);
 
                 if ThisError < MaxError
-                    nCurrent = nCurrent +1;
-                    CurrentConsensus ( nCurrent ) = j;
+                    nCurrent = nCurrent+1;
+                    CurrentConsensus(nCurrent) = j;
                 end
             end
 

@@ -286,7 +286,7 @@ while Searching == 1
 	
         % The Jacobian is expensive to compute - only recompute
         % if the gain is low , i.e. the Jacobian is not accurate
-        if Gain < 20000/3 %1/3
+        if Gain < 1/3 %1/3
             % The gain is poor - recompute the Jacobian and the Gradient
             JTransposeJ = zeros ( ProblemSize );
             for j = 1: nImages
