@@ -3,6 +3,22 @@ function [ KMatJac, FrameJac ] = SingleImageJacobian( KMatrix, NANGLE, ...
 %SINGLEIMAGEJACOBIAN Function builds, for a single image, the jacobian
 %matrix, J, such that the hessian of the error cost function is (J^T)J
 
+%The jacobian will contain partial derivatives of "image point functions"
+%with respect to 11 variables: 
+% - The five independent components of the KMatrix
+% - The six components of the perspectivity
+
+%an "image point function" refers to the function which transforms
+%an x or y coordinate in the object's frame to a u* or v*
+%predicted point on the camera's sensor chip
+
+%The Jacbian will therefore be constructed in two parts, the
+%KMatrixJacobian (KMatJac) and the FrameParametersJacobian (FrameJac)
+
+%The jacobian will have a height equal to twice the number of points in the
+%consensus set for the image in question (one row relating to each u* or v*
+%point).
+
 %Partial derivatives are calculated by computing predicted [u*,v*] points,
 %peturbing the parameters one at a time, and then computing them again. The
 %difference between the two computations is then divided by the pertubation
@@ -70,28 +86,21 @@ for j = 1:11
     %derivatives relating to u points are in the top half of the jacobian.
     
     %Assign space for a derivative vector
-    %Derivative = zeros(1,2*k);
     Derivative = zeros(2*k,1);
     
-    %Find the u related derivatives
-    %Derivative(1:k) = (AdjustedUVPoints(1,:) - InitialUVPoints(1,:))/Increment;
-    
-    %Find the v related derivatives
-    %Derivative(k+1:2*k) = (AdjustedUVPoints(2,:) - InitialUVPoints(2,:))/Increment;
-    
     for z = 1:k
-    %e(((2*z)-1),1) = Error(1,z);
+    %Find the u related derivatives
     Derivative(((2*z)-1),1) = (AdjustedUVPoints(1,z) - InitialUVPoints(1,z))/Increment;
-    %e((2*z),1) = Error(2,z);
+    %Find the v related derivatives
     Derivative((2*z),1) = (AdjustedUVPoints(2,z) - InitialUVPoints(2,z))/Increment;
     end
     
     %Place the vector of derivatives in the correct place in the correct
     %jacobian 
     if j <= 5
-        KMatJac(:,j) = Derivative; %transpose(Derivative);
+        KMatJac(:,j) = Derivative;
     else
-        FrameJac(:,j-5) = Derivative; %transpose(Derivative);
+        FrameJac(:,j-5) = Derivative;
     end
     
 end

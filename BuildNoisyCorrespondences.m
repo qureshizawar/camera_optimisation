@@ -1,6 +1,19 @@
 function [Correspond] = BuildNoisyCorrespondences (T_ow ,T_cw , CalibrationGrid , ...
 KMatrix , CameraHeight , CameraWidth )
 
+%BUILDNOISYCORRESPONDENCES Function builds a matrix containing all points
+%in a grid within the camera's view (in the grid's coordinate frame, [x,y])
+%along with the correponding points on the camera's sensor chip (in [u,v]
+%steps). The [u,v] points have noise added to them.
+
+%The points on the grid ([x,y]) are defined by CalibrationGrid.
+%The object and camera's positions/orientations are defined by 
+%transformation matrices T_ow and T_cw. 
+%NoiseSD is the standard deviation of the noise added to the [u,v] points
+
+%First generate the exact points [u,v] by transforming Points in CalibrationGrid to the
+%camera's sensor chip in CameraGrid_uv
+
 %Ensure GridPoints has the correct dimensions
 if size(CalibrationGrid, 1) ~= 4;
     error('CalibrationGrid has incorrect dimensions')
@@ -74,7 +87,7 @@ Noise = NoiseSD*randn(2, s);
 InsidePoints_uv = InsidePoints_uv + Noise;
 
 %Extract the [x,y] coordinates, corresponding to the [u,v] coordinates
-%identified earlier, from GridPoints
+%identified earlier, from CalibrationGrid
 
 %Assign space for the corresponding points
 InsidePoints_xy = zeros(2,s);
@@ -93,6 +106,6 @@ Correspond = zeros(4, s);
 Correspond(1:2,:) = InsidePoints_uv;
 Correspond(3:4,:) = InsidePoints_xy;
 
-%Cut Correspond down to size 'k' for computational speed
+%Cut Correspond down to size 'k' to remove unnecessary spaces
 Correspond = Correspond(:, 1:k);
 end

@@ -8,8 +8,8 @@ function [ KMatJac, FrameJac ] = SingleImageJacobian( KMatrix, NANGLE, ...
 % - The five independent components of the KMatrix
 % - The six components of the perspectivity
 
-%NOTe: Above, an "image point function" refers to the function which
-%transforms an x or y coordinate in the object's frame to a u* or v*
+%an "image point function" refers to the function which transforms
+%an x or y coordinate in the object's frame to a u* or v*
 %predicted point on the camera's sensor chip
 
 %The Jacbian will therefore be constructed in two parts, the
@@ -64,7 +64,7 @@ for j = 1:11
     %parameter is the midde top entry in the KMatrix, in which case add a
     %thousandth of itself
     if j ~= 2
-        Increment = 0.001*P(j);
+        Increment = 0.001*P(j); 
     else
         Increment = 0.001;
     end
@@ -77,8 +77,8 @@ for j = 1:11
         BuildAdjustedHomography(P);
     
     %Calculate a new set of [u*,v*] points corresponding to the pertubation
-    AdjustedUVPoints = PredictSensorPoints(NCORRESPOND, NCONSENSUS, Rotation_adj,...
-                            Translation_adj, KMatrix_adj);
+    AdjustedUVPoints = ComputePridicted_uv( KMatrix_adj ,Rotation_adj, Translation_adj,...
+                                            NCORRESPOND, NCONSENSUS);
     
     %Find the difference between the initial and adjusted points, and
     %divide by the pertubation. This is approximation of the partial
@@ -86,20 +86,21 @@ for j = 1:11
     %derivatives relating to u points are in the top half of the jacobian.
     
     %Assign space for a derivative vector
-    Derivative = zeros(1,2*k);
+    Derivative = zeros(2*k,1);
     
+    for z = 1:k
     %Find the u related derivatives
-    Derivative(1:k) = (AdjustedUVPoints(1,:) - InitialUVPoints(1,:))/Increment;
-    
+    Derivative(((2*z)-1),1) = (AdjustedUVPoints(1,z) - InitialUVPoints(1,z))/Increment;
     %Find the v related derivatives
-    Derivative(k+1:2*k) = (AdjustedUVPoints(2,:) - InitialUVPoints(2,:))/Increment;
+    Derivative((2*z),1) = (AdjustedUVPoints(2,z) - InitialUVPoints(2,z))/Increment;
+    end
     
     %Place the vector of derivatives in the correct place in the correct
     %jacobian 
     if j <= 5
-        KMatJac(:,j) = transpose(Derivative);
+        KMatJac(:,j) = Derivative;
     else
-        FrameJac(:,j-5) = transpose(Derivative);
+        FrameJac(:,j-5) = Derivative;
     end
     
 end

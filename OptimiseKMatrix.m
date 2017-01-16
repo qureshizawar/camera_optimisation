@@ -208,7 +208,7 @@ Iterations = 0;
 MaxIterations = 100;
 while Searching == 1
 
-    Iterations = Iterations + 1;
+    Iterations = Iterations + 1
 
     if Iterations > MaxIterations
         error (' Number of interations is too high ')
@@ -278,7 +278,7 @@ while Searching == 1
         mu = mu * max ([1/3 ,(1 -(2* Gain -1) ^3) ]);
 	
         % Update the parameters
-        KMatrix = KMatPerturbed 
+        KMatrix = KMatPerturbed;
         FrameParameters = FrameParametersPerturbed ;
 	
         % Update the error

@@ -95,6 +95,8 @@ for Runs = 1: NRuns
             Homog (3 ,1) = HomogVec (7);
             Homog (3 ,2) = HomogVec (8);
             Homog (3 ,3) = 1;
+            
+            %SampleHomog = Homog
 
             % The number of points in the current consensus set and the
             % set itself
@@ -125,8 +127,6 @@ for Runs = 1: NRuns
         end
     end
 end
-
-%SampleHomog = Homog
 
 % 6. BestConsensus now contains the largest set of consistent estimates.
 % Use this set to estimate the homography using a robust inverse

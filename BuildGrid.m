@@ -3,22 +3,21 @@ function [Grid] = BuildGrid(GridIncrement,GridWidth)
 %corners in a square grid with with square tiles. The grid has side length
 %GridWidth and each tile has side length GridIncrement.
 
-n = GridWidth/GridIncrement;
-
 %Check the validity of the inputs
 
 %Calculate how many tiles in one row of the grid. Make sure the result is
 %an integer.
+n = GridWidth/GridIncrement;
 
 if isinteger(int8(n))== 0 
     error('GridWidth/GridIncrement is not an integer')
 end 
 
-%(N+1)^2 is how many Points are required to define the corners of each tile 
+%(n+1)^2 is how many Points are required to define the corners of each tile 
 %in the grid. Define this number
-
 n2 = (n+1)^2;
-%Assign space for a 4xN2 matrix which will contain the Points of the grid
+
+%Assign space for a 4xn2 matrix which will contain the Points of the grid
 Grid = zeros(4,n2);
 
 %Define a grid in the x-y plane centred on the origin by defining
@@ -32,8 +31,8 @@ y = linspace(-GridWidth/2,GridWidth/2,n+1);
 Grid(4,:)= 1;
 
 for j=1:n+1;
-    %Here we systematically fill in sections of length N+1 of GridPoints by 
-    %first defining all points with x cooridinates x(1), then x(2), and so on
+    %systematically fill in sections of length n+1 of GridPoints by 
+    %first defining all points with y cooridinates y(1), then y(2), and so on
     Grid(1,(j-1)*(n+1)+1 : j*(n+1)) = x;
     Grid(2,(j-1)*(n+1)+1 : j*(n+1)) = y(j);
 end
