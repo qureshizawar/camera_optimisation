@@ -1,15 +1,15 @@
 function [ KMatrix , CameraHeight , CameraWidth ] = BuildCamera()
 
-ChipWidth =  [200];
-CameraWidth =  [200];
-ChipHeight =  [300];
-CameraHeight =  [300];
-FocalLength = [1.0];
-PixelWidth = [0.0001];
-PixelHeight = [0.0001];
-Skewness = [-0.1];
-P_u = [0.25];
-P_v = [0.25];
+ChipWidth =  [2100];
+CameraWidth =  [2650];
+ChipHeight =  [2650];
+CameraHeight =  [2650];
+FocalLength = [50.5];
+PixelWidth = [0.05005];
+PixelHeight = [0.05005];
+Skewness = [0];
+P_u = [0.5];
+P_v = [0.5];
 
 Parameters = [ ChipWidth , ChipHeight , ...
     FocalLength , PixelWidth , PixelHeight ,...

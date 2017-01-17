@@ -81,7 +81,7 @@ end
 k=k-1;
 
 %Add noisy vectors to the [u,v] grid points using the function 'randn'
-NoiseSD = sqrt(0.005);
+NoiseSD = sqrt(0.5);
 Noise = NoiseSD*randn(2, s);
 
 InsidePoints_uv = InsidePoints_uv + Noise;

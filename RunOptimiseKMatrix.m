@@ -24,8 +24,6 @@ nImages = 6;
 % 1. Construct the Camera model
 [ KMatrix , CameraHeight , CameraWidth ] = BuildCamera ;
 
-OKMatrix = KMatrix
-
 % 2. Construct a 1m by 1m grid with 10 mm tiles in the grid frame
 % The grid is a set of 4- element vectors [x y 0 1] '.
 GridWidth = 1000;
@@ -182,7 +180,7 @@ Seed = KMatEstimated;
 % Add 1.0 to the translation part of the image
 Seed (1 ,3) = Seed (1 ,3) + 1;
 Seed (2 ,3) = Seed (2 ,3) + 1;
-Seed (1:2 ,1:3) = Seed (1:2 ,1:3) / CameraScale
+Seed (1:2 ,1:3) = Seed (1:2 ,1:3) / CameraScale;
 
 % Optimize the K- matrix
 OptKMatrix = OptimiseKMatrix ( KMatEstimated , HomogData );
@@ -192,4 +190,4 @@ OptKMatrix (1 ,3) = OptKMatrix (1 ,3) + 1;
 OptKMatrix (2 ,3) = OptKMatrix (2 ,3) + 1;
 
 % Rescale back to pixels
-OptKMatrix (1:2 ,1:3) = OptKMatrix (1:2 ,1:3) / CameraScale 
+OptKMatrix (1:2 ,1:3) = OptKMatrix (1:2 ,1:3) / CameraScale;
