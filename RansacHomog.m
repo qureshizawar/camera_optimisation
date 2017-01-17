@@ -107,7 +107,7 @@ for Runs = 1: NRuns
                 HomogenousPoint (1) = HomogenousPoint (1) / HomogenousPoint (3) ;
                 HomogenousPoint (2) = HomogenousPoint (2) / HomogenousPoint (3) ;
 
-                ThisError = norm ( HomogenousPoint (1:2) ...
+                ThisError = norm (HomogenousPoint (1:2) ...
                     - [Correspond(1,j);Correspond(2,j)]);
 
                 if ThisError < MaxError

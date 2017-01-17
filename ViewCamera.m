@@ -15,7 +15,7 @@ function [] = ViewCamera ( ObjectLines ,T_ow , KMatrix , CameraHeight , CameraWi
 % CameraWidth is the number of horizontal pixels .
 % T_cw is the 4x4 Camera frame in world coordinates .
 
-% Check sizes
+%Check sizes
 s = size ( ObjectLines );
 if s (1) ~=4 || mod(s(2) ,2) ~= 0
 error (' ObjectLines has an invalid size ')

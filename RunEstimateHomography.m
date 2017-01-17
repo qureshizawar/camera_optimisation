@@ -38,9 +38,9 @@ Correspond = BuildNoisyCorrespondences (T_ow ,T_cw , CalibrationGrid , ...
 KMatrix , CameraHeight , CameraWidth );
 
 % 6. Add in some 'outliers ' by replacing [u v]' with a point
-% somewhere in the image .
+% somewhere in the image.
 % Define the Outlier probability
-pOutlier = 0.05;
+pOutlier = 0;
 for j = 1: length ( Correspond )
     if rand < pOutlier
     % This is an outlier - so put the point anywhere in the image .
@@ -58,7 +58,7 @@ axis ij
 % If the Ransac fails it retuns a zero Homography
 Maxerror = 3; % The maximum error allowed before rejecting a point .
 RansacRuns = 50; % The number of runs when creating the consensus set.
-[Homog , BestConsensus] = RansacHomog(Correspond , Maxerror , RansacRuns );
+[Homog , BestConsensus] = RansacHomog(Correspond , Maxerror , RansacRuns )
 
 % If you want to test the result , we can construct the homography
 % for the system from its definition .

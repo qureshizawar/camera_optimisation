@@ -31,7 +31,7 @@ y = linspace(-GridWidth/2,GridWidth/2,n+1);
 Grid(4,:)= 1;
 
 for j=1:n+1;
-    %systematically fill in sections of length n+1 of GridPoints by 
+    %systematically fill in sections of length n+1 of Grid by 
     %first defining all points with y cooridinates y(1), then y(2), and so on
     Grid(1,(j-1)*(n+1)+1 : j*(n+1)) = x;
     Grid(2,(j-1)*(n+1)+1 : j*(n+1)) = y(j);

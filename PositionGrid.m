@@ -11,7 +11,7 @@ T_ow = zeros (4 ,4);
 T_ow (4 ,:) = [0 0 0 1];
 
 % Put at some random location
-T_ow (1:3 ,4) = 2000* rand (3 ,1);
+T_ow (1:3 ,4) = 2000*rand (3 ,1);
 
 % With a random orientation
 T_ow (1:3 ,1:3) = RandomRotationMatrix ;
