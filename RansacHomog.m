@@ -127,7 +127,7 @@ for Runs = 1: NRuns
     end
 end
 
-%SampleHomog = Homog
+SampleHomog = Homog
 
 % 6. BestConsensus now contains the largest set of consistent estimates.
 % Use this set to estimate the homography using a robust inverse

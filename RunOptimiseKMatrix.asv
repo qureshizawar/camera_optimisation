@@ -89,8 +89,8 @@ for CalImage = 1: nImages
 
         % Now scale the grid and camera to [-1, 1] to improve
         % the conditioning of the Homography estimation .
-        Correspond (1:2 ,:) = Correspond (1:2 ,:) * CameraScale - 1.0;
-        Correspond (3:4 ,:) = Correspond (3:4 ,:) * GridScale ;
+        Correspond(1:2 ,:) = Correspond(1:2 ,:)*CameraScale - 1.0;
+        Correspond(3:4 ,:) = Correspond(3:4 ,:)*GridScale ;
 
         % 7. Perform the Ransac estimation
         % If the Ransac fails it retuns a zero Homography
@@ -105,14 +105,14 @@ for CalImage = 1: nImages
         % The number of runs when creating the consensus set.
         RansacRuns = 50;
         [Homog , BestConsensus ] = ...
-            RansacHomog ( Correspond , Maxerror * CameraScale , RansacRuns );
+            RansacHomog(Correspond , Maxerror*CameraScale , RansacRuns);
 
         if Homog (3 ,3) > 0
             % This image worked . So record the homography and the
             % consensus set
-            HomogData { CalImage , NHOMOGRAPHY } = Homog ;
-            HomogData { CalImage , NCORRESPOND } = Correspond ;
-            HomogData { CalImage , NCONSENSUS } = BestConsensus ;
+            HomogData{CalImage , NHOMOGRAPHY} = Homog ;
+            HomogData{CalImage , NCORRESPOND} = Correspond ;
+            HomogData{CalImage , NCONSENSUS} = BestConsensus ;
         else
             % The estimate failed . So go around again .
             Estimating = 1;
@@ -124,8 +124,8 @@ end % end of the nImages loop
 % 8. Build the regressor for estimating the Cholesky product
 Regressor = zeros (2*nImages ,6);
 for CalImage = 1: nImages
-	r1 = 2* CalImage-1;
-	r2 = 2* CalImage ;
+	r1 = 2*CalImage - 1;
+	r2 = 2*CalImage ;
 	Regressor (r1:r2 ,:) = KMatrixRowPair ( HomogData { CalImage ,1}) ;
 end
 

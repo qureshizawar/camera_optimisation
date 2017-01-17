@@ -58,7 +58,7 @@ axis ij
 % If the Ransac fails it retuns a zero Homography
 Maxerror = 3; % The maximum error allowed before rejecting a point .
 RansacRuns = 50; % The number of runs when creating the consensus set.
-[Homog , BestConsensus ] = RansacHomog ( Correspond , Maxerror , RansacRuns );
+[Homog , BestConsensus] = RansacHomog(Correspond , Maxerror , RansacRuns );
 
 % If you want to test the result , we can construct the homography
 % for the system from its definition .
@@ -66,6 +66,6 @@ RansacRuns = 50; % The number of runs when creating the consensus set.
 % First find the object frame in the camera frame
 T_oc = T_cw \ T_ow ;
 % Construct the non - normalized homography from K*[x y t]
-OrigHomog = KMatrix * [ T_oc(1:3 ,1) T_oc(1:3 ,2) T_oc(1:3 ,4) ];
+OrigHomog = KMatrix*[T_oc(1:3,1) T_oc(1:3,2) T_oc(1:3,4)];
 % And normalise so that (3 ,3) is 1.0 - output for inspection
 OrigHomog = OrigHomog / OrigHomog (3 ,3)

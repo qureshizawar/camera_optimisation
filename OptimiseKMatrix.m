@@ -34,7 +34,7 @@ function [ KMatrix ] = OptimiseKMatrix ( InitialKMatrix , Data )
 % Initialise the KMatrix
 KMatrix = InitialKMatrix ;
 
-% Normalize the K- matrix ( just in case0
+% Normalize the K- matrix (just in case)
 KMatrix = KMatrix / KMatrix (3 ,3);
 
 % Define the numbers to access the DataCell
@@ -43,16 +43,16 @@ NCORRESPOND = 2;
 NCONSENSUS = 3;
 
 % Extract the number of images used in the estimation
-s = size ( Data );
-nImages = s (1);
+s = size (Data);
+nImages = s(1);
 
 % A rotation matrix to be constructed .
-RotMat = zeros (3);
+RotMat = zeros(3);
 
 % 1. We first need to use the initial KMatrix to generate
 % a perspectivity for each image and hence the parameterization
 % of the grid's frame in the camera frame .
-FrameParameters = cell ( nImages ,2);
+FrameParameters = cell(nImages ,2);
 % Labels for accessing the cell
 NANGLE = 1;
 NTRANSLATION = 2;
@@ -60,26 +60,26 @@ NTRANSLATION = 2;
 for nHomog = 1: nImages
 	% Extract the homography from the data and convert to
 	% a perspectivity
-	Perspectivity = KMatrix \ Data { nHomog , NHOMOGRAPHY };
+	Perspectivity = KMatrix \ Data{nHomog,NHOMOGRAPHY};
 
 	% The Perspectivity is scaled so that its bottom right hand
     % is a unit vector - we need the first column to have a norm
 	% of 1 (a column of a rotation matrix )
-	Perspectivity = Perspectivity / norm ( Perspectivity (: ,1));
+	Perspectivity = Perspectivity / norm(Perspectivity(:,1));
 
 	% The translation part of the perspectivity in the camera frame
-	Translation = Perspectivity (: ,3);
+	Translation = Perspectivity (:,3);
 
 	% Start building the rotation matrix
-	RotMat (: ,1:2) = Perspectivity (: ,1:2) ;
+	RotMat (:,1:2) = Perspectivity (:,1:2) ;
 	% Project out the first column from the second
-	RotMat (: ,2) = RotMat (: ,2) - ( RotMat (: ,1)'* RotMat (: ,2))* RotMat (: ,1);
-	RotMat (: ,2) = RotMat (: ,2) / norm ( RotMat (: ,2));
+	RotMat(:,2) = RotMat(:,2) - (RotMat(:,1)'*RotMat(:,2))*RotMat(:,1);
+	RotMat(: ,2) = RotMat(: ,2) / norm (RotMat (: ,2));
 	% And complete with a cross product
-	RotMat (: ,3) = cross ( RotMat (: ,1) ,RotMat (: ,2));
+	RotMat(: ,3) = cross(RotMat(:,1),RotMat(:,2));
 
 	% Find the angle of rotation usng the trace identity
-	CosTheta = ( trace ( RotMat ) -1) /2;
+	CosTheta = (trace(RotMat)-1)/2;
 
 	% Make sure the answer is valid
     if CosTheta > 1
@@ -90,29 +90,29 @@ for nHomog = 1: nImages
         CosTheta = -1;
     end
 	% Theta is the angle of rotation
-	Theta = acos ( CosTheta );
+	Theta = acos(CosTheta);
 
 	% Find the axis of rotation by finding the real eigenvector
-	[V,D] = eig( RotMat );
+	[V,D] = eig(RotMat);
 	D = diag (D);
 	% I will be the real vector .
 	[M,I] = max(real(D));
-	RotAxis = real (V(:,I));
-	RotAxis = RotAxis / norm ( RotAxis );
+	RotAxis = real(V(:,I));
+	RotAxis = RotAxis / norm (RotAxis);
 
 	% We need to check if the axis is pointing in the 'right ' direction
 	% consistent with Theta using Rodrigue's formula
-	Rplus = RodriguesRotation ( RotAxis , Theta );
-	Rminus = RodriguesRotation (- RotAxis , Theta );
+	Rplus = RodriguesRotation(RotAxis , Theta);
+	Rminus = RodriguesRotation(-RotAxis , Theta);
 
 	% Reverse the axis if minus Theta is the best match
-    if norm ( RotMat - Rminus ) < norm (RotMat - Rplus )
+    if norm (RotMat - Rminus) < norm (RotMat - Rplus)
         RotAxis = -RotAxis ;
     end
 
 	% Now shift the angle by 4pi so that we can have negative as
 	% well as positive angles
-    Theta = Theta +4*pi;
+    Theta = Theta+4*pi;
 	% Generate a shifted angle - axis representation of the rotation .
 	RotAxis = RotAxis * Theta ;
 
@@ -135,11 +135,11 @@ NERRORVECTOR = 1;
 NKMATJACOB = 2;
 NFRAMEJACOB = 3;
 
-OptComponents = cell ( nImages ,3);
+OptComponents = cell(nImages ,3);
 
 % Allocate space for J'J
-ProblemSize = 5+6* nImages ;
-JTransposeJ = zeros ( ProblemSize );
+ProblemSize = 5+6*nImages ;
+JTransposeJ = zeros(ProblemSize);
 
 % Initialise the total error
 CurrentError = 0.0;
@@ -155,7 +155,7 @@ Gradient = zeros(ProblemSize ,1);
 
 for j = 1: nImages
     % The error vector for each image
-    OptComponents{j, NERRORVECTOR } = ComputeImageErrors ( KMatrix , ...
+    OptComponents{j, NERRORVECTOR } = ComputeImageErrors( KMatrix , ...
     FrameParameters{j, NANGLE }, FrameParameters{j, NTRANSLATION } ,...
     Data{j, NCORRESPOND }, Data{j, NCONSENSUS });
 
@@ -175,28 +175,28 @@ for j = 1: nImages
 	OptComponents{j, NKMATJACOB }'*OptComponents{j, NKMATJACOB };
 
 	% The diagonal image block associated with the frame parameters
-	StartRow = 6 + (j -1) *6;
-	EndRow = StartRow +5;
-	JTransposeJ ( StartRow :EndRow , StartRow : EndRow ) = ...
-	OptComponents{j, NFRAMEJACOB }'*OptComponents{j, NFRAMEJACOB };
+	StartRow = 6 + (j-1)*6;
+	EndRow = StartRow+5;
+	JTransposeJ (StartRow:EndRow , StartRow:EndRow ) = ...
+        OptComponents{j, NFRAMEJACOB}'*OptComponents{j, NFRAMEJACOB};
 	
 	JTransposeJ (1:5 , StartRow : EndRow ) = ...
-	OptComponents{j, NKMATJACOB }'*OptComponents{j, NFRAMEJACOB };
+        OptComponents{j, NKMATJACOB}'*OptComponents{j, NFRAMEJACOB};
 	
-	JTransposeJ ( StartRow :EndRow ,1:5) = JTransposeJ (1:5 , StartRow : EndRow )';
+	JTransposeJ(StartRow :EndRow ,1:5) = JTransposeJ (1:5 , StartRow : EndRow )';
     
     %OptComponents{j, NKMATJACOB}'
     %OptComponents{j, NERRORVECTOR}
-	% Compute the gradient vector
+	%Compute the gradient vector
 	Gradient (1:5) = Gradient (1:5) + ...
-	OptComponents{j, NKMATJACOB}'*OptComponents{j, NERRORVECTOR};
+        OptComponents{j, NKMATJACOB}'*OptComponents{j, NERRORVECTOR};
 	Gradient (StartRow : EndRow) = OptComponents{j, NFRAMEJACOB}'*...
-	OptComponents{j, NERRORVECTOR};
+        OptComponents{j, NERRORVECTOR};
 
 end
 
 % The initial value of mu
-mu = max( diag ( JTransposeJ )) * 0.1;
+mu = max(diag(JTransposeJ))*0.1;
 
 % The initial value of the exponential growth factor nu
 % This variable is used to increase mu if the error goes up.
@@ -216,20 +216,20 @@ while Searching == 1
 
     norm ( Gradient )/ ProblemSize
     
-    % 4. Test for convergence - choose a size for the gradient
+    % 3. Test for convergence - choose a size for the gradient
     if norm ( Gradient )/ ProblemSize < 0.001
         break ; % Leave the loop
     end
 
-    % 3. Solve for the change to parameters
-    dp = -( JTransposeJ + mu*eye( ProblemSize )) \ Gradient ;
+    % 4. Solve for the change to parameters
+    dp = -(JTransposeJ + mu*eye(ProblemSize)) \ Gradient;
 
     % Step 5.
     PredictedChange = Gradient'*dp;
 
     % 6. Define the new test parameters
     KMatPerturbed = KMatrix; 
-    FrameParametersPerturbed = FrameParameters ;
+    FrameParametersPerturbed = FrameParameters;
 
     KMatPerturbed (1 ,1) = KMatPerturbed (1 ,1) + dp (1);
     KMatPerturbed (1 ,2) = KMatPerturbed (1 ,2) + dp (2);
@@ -242,13 +242,13 @@ while Searching == 1
     for j = 1: nImages
 
         % Perturb the image location
-        StartRow = 6 + (j -1) *6;
-        FrameParametersPerturbed {j, NANGLE } = ...
-        FrameParametersPerturbed {j, NANGLE } + dp( StartRow : StartRow +2);
+        StartRow = 6 + (j -1)*6;
+        FrameParametersPerturbed{j, NANGLE} = ...
+        FrameParametersPerturbed{j, NANGLE} + dp(StartRow:StartRow+2);
 	
         FrameParametersPerturbed {j, NTRANSLATION } = ...
         FrameParametersPerturbed {j, NTRANSLATION } + ...
-        dp( StartRow +3: StartRow +5);
+        dp(StartRow+3:StartRow+5);
 	
         % ... And compute the error vector for this image
         OptComponents{j, NERRORVECTOR } = ...
@@ -271,11 +271,11 @@ while Searching == 1
     if ChangeInError > 0
         % Error has gone up. Increase mu
         mu = mu*nu;
-        nu = nu *2;
+        nu = nu*2;
     else
         % Error has gone down . Update mu
         nu = 2; % Default start value of nu
-        mu = mu * max ([1/3 ,(1 -(2* Gain -1) ^3) ]);
+        mu = mu * max([1/3,(1-(2*Gain-1)^3)]);
 	
         % Update the parameters
         KMatrix = KMatPerturbed;
@@ -323,7 +323,7 @@ while Searching == 1
         end
 	
         % Compute the new gradient
-        Gradient = zeros ( ProblemSize ,1);
+        Gradient = zeros(ProblemSize ,1);
         for j = 1: nImages
             Gradient (1:5) = Gradient (1:5) + ...
                 OptComponents{j, NKMATJACOB }'*OptComponents{j, NERRORVECTOR};

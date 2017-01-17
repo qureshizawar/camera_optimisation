@@ -10,7 +10,7 @@ function [ KMatJac, FrameJac ] = SingleImageJacobian( KMatrix, NANGLE, ...
 
 %an "image point function" refers to the function which transforms
 %an x or y coordinate in the object's frame to a u* or v*
-%predicted point on the camera's sensor chip
+%predicted point on the camera
 
 %The Jacbian will therefore be constructed in two parts, the
 %KMatrixJacobian (KMatJac) and the FrameParametersJacobian (FrameJac)
