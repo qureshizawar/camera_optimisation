@@ -5,7 +5,7 @@ function [ KMatrix ] = OptimiseKMatrix ( InitialKMatrix , Data )
 % Data is a Matlab cell structure containing homographies ,
 % corresponding points in the form [[u v]' [x y]'], and the
 % indices of the consensus sets generated during the Ransac
-% estimation of the homographies .
+% estimation of the homographies.
 %
 % The algorithm ( Levenberg - Marquadt )
 % 1. Compute a shifted angle - axis representation of the
@@ -185,8 +185,6 @@ for j = 1: nImages
 	
 	JTransposeJ(StartRow :EndRow ,1:5) = JTransposeJ (1:5 , StartRow : EndRow )';
     
-    %OptComponents{j, NKMATJACOB}'
-    %OptComponents{j, NERRORVECTOR}
 	%Compute the gradient vector
 	Gradient (1:5) = Gradient (1:5) + ...
         OptComponents{j, NKMATJACOB}'*OptComponents{j, NERRORVECTOR};
@@ -214,10 +212,10 @@ while Searching == 1
         error (' Number of interations is too high ')
     end
 
-    norm ( Gradient )/ ProblemSize
+    norm(Gradient)/ ProblemSize
     
     % 3. Test for convergence - choose a size for the gradient
-    if norm ( Gradient )/ ProblemSize < 0.001
+    if norm(Gradient)/ ProblemSize < 0.0001
         break ; % Leave the loop
     end
 
@@ -280,6 +278,9 @@ while Searching == 1
         % Update the parameters
         KMatrix = KMatPerturbed;
         FrameParameters = FrameParametersPerturbed ;
+        
+        Iteration(Iterations) = Iterations;
+        Current_Error(Iterations) = CurrentError;
 	
         % Update the error
         CurrentError = NewError ;
@@ -335,5 +336,13 @@ while Searching == 1
 
 
 end
+
+        figure
+        plot(Iteration, Current_Error,'r')
+        title('Changes in Current Error per Iteration');
+        ylabel('Current Error');
+        xlabel('Number of Iterations');
+        
+        Performance = CurrentError * Iterations
 
 end

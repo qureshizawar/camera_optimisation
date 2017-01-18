@@ -65,9 +65,7 @@ for j = 1:11
     %thousandth of itself
     if j < 6
         Increment = 0.001*P(j); 
-    elseif j > 5 && j < 9 
-        Increment = 0.0349;
-    else
+    elseif
         Increment = 0.001;
     end
     

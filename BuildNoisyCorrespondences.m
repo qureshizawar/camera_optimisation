@@ -1,5 +1,5 @@
 function [Correspond] = BuildNoisyCorrespondences (T_ow ,T_cw , CalibrationGrid , ...
-KMatrix , CameraHeight , CameraWidth )
+KMatrix , CameraHeight , CameraWidth, NoiseSD)
 
 %BUILDNOISYCORRESPONDENCES Function builds a matrix containing all points
 %in a grid within the camera's view (in the grid's coordinate frame, [x,y])
@@ -81,7 +81,7 @@ end
 k=k-1;
 
 %Add noisy vectors to the [u,v] grid points using the function 'randn'
-NoiseSD = sqrt(0.5);
+%NoiseSD = sqrt(0.5);
 Noise = NoiseSD*randn(2, s);
 
 InsidePoints_uv = InsidePoints_uv + Noise;

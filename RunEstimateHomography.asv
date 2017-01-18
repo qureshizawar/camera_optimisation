@@ -34,7 +34,7 @@ T_cw = FillImage (T_ow , KMatrix , GridWidth , CameraHeight , CameraWidth );
 % the point correpondences .
 % Correspond is a set of pairs of vectors of the form [[u v]' [x y]']
 % for each grid corner that lies inside the image .
-NoiseSD = sqrt(1);
+NoiseSD = sqrt(0.01);
 Correspond = BuildNoisyCorrespondences (T_ow ,T_cw , CalibrationGrid , ...
 KMatrix , CameraHeight , CameraWidth,NoiseSD );
 
@@ -58,7 +58,7 @@ axis ij
 % 7 Perform the Ransac estimation - output the result for inspection
 % If the Ransac fails it retuns a zero Homography
 Maxerror = 1; % The maximum error allowed before rejecting a point .
-RansacRuns = 500; % The number of runs when creating the consensus set.
+RansacRuns = 100; % The number of runs when creating the consensus set.
 [Homog , BestConsensus] = RansacHomog(Correspond , Maxerror , RansacRuns )
 
 % If you want to test the result , we can construct the homography
@@ -71,4 +71,4 @@ OrigHomog = KMatrix*[T_oc(1:3,1) T_oc(1:3,2) T_oc(1:3,4)];
 % And normalise so that (3 ,3) is 1.0 - output for inspection
 OrigHomog = OrigHomog / OrigHomog (3 ,3)
 
-%Er = norm(OrigHomog) - norm(Homog);
+Er = norm(OrigHomog) - norm(Homog);

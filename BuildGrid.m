@@ -1,11 +1,11 @@
 function [Grid] = BuildGrid(GridIncrement,GridWidth)
 %BUILDGRID Function returns homogeneous Points (in 3-D) defining all
-%corners in a square grid with with square tiles. The grid has side length
+%corners in a square grid with square tiles. The grid has side length
 %GridWidth and each tile has side length GridIncrement.
 
 %Check the validity of the inputs
 
-%Calculate how many tiles in one row of the grid. Make sure the result is
+%Calculate number of tiles in one row of the grid. Make sure the result is
 %an integer.
 n = GridWidth/GridIncrement;
 
@@ -20,6 +20,9 @@ n2 = (n+1)^2;
 %Assign space for a 4xn2 matrix which will contain the Points of the grid
 Grid = zeros(4,n2);
 
+%Set the homogeneous multiplier of each Point on the grid to 1
+Grid(4,:)= 1;
+
 %Define a grid in the x-y plane centred on the origin by defining
 %the x and y components of the grid
 
@@ -27,8 +30,6 @@ Grid = zeros(4,n2);
 x = linspace(-GridWidth/2,GridWidth/2,n+1);
 y = linspace(-GridWidth/2,GridWidth/2,n+1);
     
-%Set the homogeneous multiplier of each Point on the grid to 1
-Grid(4,:)= 1;
 
 for j=1:n+1;
     %systematically fill in sections of length n+1 of Grid by 

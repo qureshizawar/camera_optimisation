@@ -23,8 +23,6 @@ nImages = 6;
 % 1. Construct the Camera model
 [ KMatrix , CameraHeight , CameraWidth ] = BuildCamera ;
 
-KMatrix
-
 % 2. Construct a 1m by 1m grid with 10 mm tiles in the grid frame
 % The grid is a set of 4- element vectors [x y 0 1] '.
 GridWidth = 1000;
@@ -65,14 +63,15 @@ for CalImage = 1: nImages
         % generate the point correpondences.
         % Correspond is a set of pairs of vectors of the form [[u v]' [x y]']
         % for each grid corner that lies inside the image .
+        NoiseSD = sqrt(1);
         Correspond = BuildNoisyCorrespondences (T_ow ,T_cw , CalibrationGrid , ...
-                KMatrix , CameraHeight , CameraWidth );
+                KMatrix , CameraHeight , CameraWidth,NoiseSD );
 
         % 6. Add in some 'outliers ' by replacing [u v]' with a point
         % somewhere in the image .
         % Define the Outlier probability
         pOutlier = 0.05;
-        for j = 1: length ( Correspond )
+        for j = 1: length (Correspond)
             r = rand ;
             if r < pOutlier
                 Correspond (1,j) = rand * ( CameraWidth -1);
@@ -173,4 +172,6 @@ KMatEstimated (1 ,3) = KMatEstimated (1 ,3) + 1;
 KMatEstimated (2 ,3) = KMatEstimated (2 ,3) + 1;
 
 % Rescale back to pixels
-KMatEstimated (1:2 ,1:3) = KMatEstimated (1:2 ,1:3) / CameraScale 
+KMatEstimated (1:2 ,1:3) = KMatEstimated (1:2 ,1:3) / CameraScale
+
+er = norm(KMatEstimated) - norm(KMatrix)

@@ -29,6 +29,8 @@ Error = zeros(2*s,1);
 
 %Compute error vector
 for k = 1:s
+    %Subtract the actual image points (extracted from the correspondence
+    %matrix) from teh predicted image points
     Error(((2*k)-1):(2*k),1) = ((Pridicted_uv(1:2,k)) - Actual_uv(1:2,k));
 end
 

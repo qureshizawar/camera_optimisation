@@ -69,9 +69,10 @@ for CalImage = 1: nImages
         % generate the point correpondences .
         % Correspond is a set of pairs of vectors of the form
         % [[u v]' [x y]'] for each grid corner that lies inside the
-        % image .
+        % image.
+        NoiseSD = sqrt(0.5);
         Correspond = BuildNoisyCorrespondences (T_ow ,T_cw ,...
-            CalibrationGrid , KMatrix , CameraHeight , CameraWidth );
+            CalibrationGrid , KMatrix , CameraHeight , CameraWidth, NoiseSD);
 
         % 6. Add in some 'outliers ' by replacing [u v]' with a point
         % somewhere in the image .
