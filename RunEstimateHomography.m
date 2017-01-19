@@ -34,14 +34,14 @@ T_cw = FillImage (T_ow , KMatrix , GridWidth , CameraHeight , CameraWidth );
 % the point correpondences .
 % Correspond is a set of pairs of vectors of the form [[u v]' [x y]']
 % for each grid corner that lies inside the image .
-NoiseSD = sqrt(1);
+NoiseSD = sqrt(0.5);
 Correspond = BuildNoisyCorrespondences (T_ow ,T_cw , CalibrationGrid , ...
 KMatrix , CameraHeight , CameraWidth,NoiseSD );
 
 % 6. Add in some 'outliers ' by replacing [u v]' with a point
 % somewhere in the image.
 % Define the Outlier probability
-pOutlier = 0;
+pOutlier = 0.05;
 for j = 1: length ( Correspond )
     if rand < pOutlier
     % This is an outlier - so put the point anywhere in the image .
@@ -57,8 +57,8 @@ axis ij
 
 % 7 Perform the Ransac estimation - output the result for inspection
 % If the Ransac fails it retuns a zero Homography
-Maxerror = 1; % The maximum error allowed before rejecting a point .
-RansacRuns = 500; % The number of runs when creating the consensus set.
+Maxerror = 3; % The maximum error allowed before rejecting a point .
+RansacRuns = 50; % The number of runs when creating the consensus set.
 [Homog , BestConsensus] = RansacHomog(Correspond , Maxerror , RansacRuns )
 
 % If you want to test the result , we can construct the homography

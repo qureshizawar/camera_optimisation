@@ -215,7 +215,7 @@ while Searching == 1
     norm(Gradient)/ ProblemSize
     
     % 3. Test for convergence - choose a size for the gradient
-    if norm(Gradient)/ ProblemSize < 0.0001
+    if norm(Gradient)/ ProblemSize < 0.000001
         break ; % Leave the loop
     end
 
@@ -338,9 +338,9 @@ while Searching == 1
 end
 
         figure
-        plot(Iteration, Current_Error,'r')
-        title('Changes in Current Error per Iteration');
-        ylabel('Current Error');
+        plot(Iteration, Current_Error,'b')
+        title('Error vs Iteration');
+        ylabel('Error');
         xlabel('Number of Iterations');
         
         Performance = CurrentError * Iterations
