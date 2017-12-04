@@ -9,4 +9,6 @@ RANSAC to reject outliers. A number of images are used to estimate homographies 
 (k-matrix) entailing the intrinsic properties of the camera model is built. This estimated k-matrix is then
 optimized to produce the model for the camera.
 
+Load RunOptimiseKMatrix.m for full estimation and optimisation of a camera K- matrix
+
 Please read Calibrating a digital camera for computer vision.pdf for more information
