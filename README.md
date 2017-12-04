@@ -8,3 +8,5 @@ points from an object frame to the camera frame) called a homography is estimate
 RANSAC to reject outliers. A number of images are used to estimate homographies from which a matrix
 (k-matrix) entailing the intrinsic properties of the camera model is built. This estimated k-matrix is then
 optimized to produce the model for the camera.
+
+Please read Calibrating a digital camera for computer vision.pdf for more information
